@@ -56,23 +56,6 @@ class SettingsPage extends StatelessWidget {
             onTap: () => Get.toNamed(AppRoutes.themeSettings),
           ),
           const Divider(indent: 16, endIndent: 16),
-          ListTile(
-            leading: const Icon(Icons.language),
-            title: const Text('语言'),
-            subtitle: const Text('简体中文'),
-            trailing: const Icon(Icons.chevron_right),
-            onTap: () {
-              Get.snackbar('提示', '功能开发中...');
-            },
-          ),
-          const Divider(indent: 16, endIndent: 16),
-          ListTile(
-            leading: const Icon(Icons.notifications),
-            title: const Text('通知'),
-            subtitle: const Text('推送通知和实时活动设置'),
-            trailing: const Icon(Icons.chevron_right),
-            onTap: () => Get.toNamed(AppRoutes.notificationSettings),
-          ),
 
           // 其他部分
           Padding(
@@ -94,26 +77,10 @@ class SettingsPage extends StatelessWidget {
           ),
           const Divider(indent: 16, endIndent: 16),
           ListTile(
-            leading: const Icon(Icons.help_outline),
-            title: const Text('帮助与反馈'),
-            trailing: const Icon(Icons.chevron_right),
-            onTap: () {
-              Get.snackbar('提示', '功能开发中...');
-            },
-          ),
-          const Divider(indent: 16, endIndent: 16),
-          ListTile(
             leading: const Icon(Icons.info_outline),
             title: const Text('关于'),
             trailing: const Icon(Icons.chevron_right),
             onTap: () => Get.toNamed(AppRoutes.about),
-          ),
-          const Divider(indent: 16, endIndent: 16),
-          ListTile(
-            leading: const Icon(Icons.privacy_tip_outlined),
-            title: const Text('隐私政策'),
-            trailing: const Icon(Icons.chevron_right),
-            onTap: () => Get.toNamed(AppRoutes.privacyPolicy),
           ),
           const SizedBox(height: 16),
         ],

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:get/get.dart';
-import '../routes/app_routes.dart';
 
 class AboutPage extends StatelessWidget {
   const AboutPage({super.key});
@@ -194,13 +193,6 @@ class AboutPage extends StatelessWidget {
             subtitle: const Text('如果你喜欢这个项目，请给个 Star'),
             trailing: const Icon(Icons.open_in_new),
             onTap: () => _launchURL(githubRepo),
-          ),
-          const Divider(indent: 16, endIndent: 16),
-          ListTile(
-            leading: const Icon(Icons.privacy_tip_outlined),
-            title: const Text('隐私政策'),
-            trailing: const Icon(Icons.chevron_right),
-            onTap: () => Get.toNamed(AppRoutes.privacyPolicy),
           ),
 
           const SizedBox(height: 32),

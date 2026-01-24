@@ -12,8 +12,6 @@ import 'package:rank_hub/pages/library/library_page.dart';
 import 'package:rank_hub/pages/detail.dart';
 import 'package:rank_hub/pages/settings.dart';
 import 'package:rank_hub/pages/theme_settings.dart';
-import 'package:rank_hub/pages/notification_settings.dart';
-import 'package:rank_hub/pages/privacy_policy.dart';
 import 'package:rank_hub/pages/about.dart';
 import 'package:rank_hub/pages/log_page.dart';
 import 'package:rank_hub/routes/app_routes.dart';
@@ -51,16 +49,6 @@ class AppPages {
     GetPage(
       name: AppRoutes.themeSettings,
       page: () => const ThemeSettingsPage(),
-      transition: Transition.native,
-    ),
-    GetPage(
-      name: AppRoutes.notificationSettings,
-      page: () => const NotificationSettingsPage(),
-      transition: Transition.native,
-    ),
-    GetPage(
-      name: AppRoutes.privacyPolicy,
-      page: () => const PrivacyPolicyPage(),
       transition: Transition.native,
     ),
     GetPage(

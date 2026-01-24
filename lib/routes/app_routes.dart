@@ -7,8 +7,6 @@ class AppRoutes {
   static const detail = '/detail';
   static const settings = '/settings';
   static const themeSettings = '/theme-settings';
-  static const notificationSettings = '/notification-settings';
-  static const privacyPolicy = '/privacy-policy';
   static const about = '/about';
   static const logs = '/logs';
   static const nearcade = '/nearcade';
