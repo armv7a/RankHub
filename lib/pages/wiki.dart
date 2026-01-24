@@ -1,21 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rank_hub/controllers/game_controller.dart';
-import 'package:rank_hub/widgets/game_selector_sheet.dart';
 
 class WikiPage extends GetView<GameController> {
   const WikiPage({super.key});
-
-  void _showGameSelector() {
-    final games = controller.getAvailableGames();
-    GameSelectorSheet.show(
-      Get.context!,
-      games: games,
-      selectedGame: controller.selectedWikiGame,
-      onGameSelected: controller.selectWikiGame,
-      title: '选择游戏',
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,23 +19,7 @@ class WikiPage extends GetView<GameController> {
           elevation: 0,
           actionsPadding: const EdgeInsets.symmetric(horizontal: 8),
           titleSpacing: 24,
-          title: const Text('资料库'),
-          actions: [
-            TextButton.icon(
-              onPressed: _showGameSelector,
-              icon: Text(
-                selectedGame?.name ?? '选择游戏',
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.primary,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              label: Icon(
-                Icons.arrow_drop_down,
-                color: Theme.of(context).colorScheme.primary,
-              ),
-            ),
-          ],
+          title: const Text('曲目'),
           centerTitle: false,
         ),
         body: contentViews.isEmpty
@@ -80,7 +52,7 @@ class WikiPage extends GetView<GameController> {
           ),
           const SizedBox(height: 12),
           Text(
-            '请先添加账号并选择游戏',
+            '请先添加账号',
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
               color: colorScheme.onSurfaceVariant,
             ),

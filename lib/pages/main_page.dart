@@ -56,7 +56,7 @@ class MainPage extends GetView<MainController> {
                 NavigationDestination(
                   icon: Icon(Icons.book_outlined),
                   selectedIcon: Icon(Icons.book),
-                  label: '资料库',
+                  label: '曲目',
                 ),
                 NavigationDestination(
                   icon: Icon(Icons.query_stats_outlined),
