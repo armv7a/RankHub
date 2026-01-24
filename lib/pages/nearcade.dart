@@ -327,29 +327,6 @@ class _NearcadePageState extends State<NearcadePage> {
             ),
           ),
 
-          // 返回按钮
-          Positioned(
-            top: MediaQuery.of(context).padding.top + 16,
-            left: 16,
-            child: Material(
-              color: Theme.of(context).colorScheme.surface,
-              borderRadius: BorderRadius.circular(12),
-              elevation: 4,
-              child: InkWell(
-                onTap: () => Get.back(),
-                borderRadius: BorderRadius.circular(12),
-                child: Container(
-                  padding: const EdgeInsets.all(12),
-                  child: Icon(
-                    Icons.arrow_back_ios_new,
-                    size: 20,
-                    color: Theme.of(context).colorScheme.onSurface,
-                  ),
-                ),
-              ),
-            ),
-          ),
-
           // 所有机厅按钮
           Positioned(
             top: MediaQuery.of(context).padding.top + 16,
