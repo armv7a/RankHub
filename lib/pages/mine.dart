@@ -185,69 +185,68 @@ class MinePage extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
 
-                  // 当前账号信息 - 如果是 osu! 平台，则不显示这个默认区域，直接使用卡片代替
-                  if (currentAccount?.platform != Platform.osu)
-                    Row(
-                      children: [
-                        // 头像
-                        Container(
-                          width: 60,
-                          height: 60,
-                          decoration: BoxDecoration(
-                            color: colorScheme.primaryContainer,
-                            borderRadius: BorderRadius.circular(8),
-                            image: currentAccount?.avatarUrl != null
-                                ? DecorationImage(
-                                    image: NetworkImage(
-                                      currentAccount!.avatarUrl!,
-                                    ),
-                                    fit: BoxFit.cover,
-                                  )
-                                : null,
-                          ),
-                          child: currentAccount?.avatarUrl == null
-                              ? Icon(
-                                  Icons.person,
-                                  size: 32,
-                                  color: colorScheme.onPrimaryContainer,
+                  // 当前账号信息
+                  Row(
+                    children: [
+                      // 头像
+                      Container(
+                        width: 60,
+                        height: 60,
+                        decoration: BoxDecoration(
+                          color: colorScheme.primaryContainer,
+                          borderRadius: BorderRadius.circular(8),
+                          image: currentAccount?.avatarUrl != null
+                              ? DecorationImage(
+                                  image: NetworkImage(
+                                    currentAccount!.avatarUrl!,
+                                  ),
+                                  fit: BoxFit.cover,
                                 )
                               : null,
                         ),
-                        const SizedBox(width: 16),
-                        // 文字信息
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                currentAccount?.displayName ??
-                                    currentAccount?.externalId ??
-                                    '未知账号',
-                                style: Theme.of(context).textTheme.titleLarge
-                                    ?.copyWith(fontWeight: FontWeight.bold),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              const SizedBox(height: 4),
-                              Text(
-                                currentAccount != null
-                                    ? (PlatformRegistry()
-                                              .getPlatformByType(
-                                                currentAccount.platform,
-                                              )
-                                              ?.name ??
-                                          '未知平台')
-                                    : '',
-                                style: Theme.of(context).textTheme.bodyMedium
-                                    ?.copyWith(
-                                      color: colorScheme.onSurfaceVariant,
-                                    ),
-                              ),
-                            ],
-                          ),
+                        child: currentAccount?.avatarUrl == null
+                            ? Icon(
+                                Icons.person,
+                                size: 32,
+                                color: colorScheme.onPrimaryContainer,
+                              )
+                            : null,
+                      ),
+                      const SizedBox(width: 16),
+                      // 文字信息
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              currentAccount?.displayName ??
+                                  currentAccount?.externalId ??
+                                  '未知账号',
+                              style: Theme.of(context).textTheme.titleLarge
+                                  ?.copyWith(fontWeight: FontWeight.bold),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              currentAccount != null
+                                  ? (PlatformRegistry()
+                                            .getPlatformByType(
+                                              currentAccount.platform,
+                                            )
+                                            ?.name ??
+                                        '未知平台')
+                                  : '',
+                              style: Theme.of(context).textTheme.bodyMedium
+                                  ?.copyWith(
+                                    color: colorScheme.onSurfaceVariant,
+                                  ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             );
@@ -280,12 +279,10 @@ class MinePage extends StatelessWidget {
               return const SizedBox.shrink();
             }
 
-            // 如果是 osu! 平台，卡片直接展示，不需要额外的顶部间距（因为上面的默认信息区已隐藏）
             // 其他平台可能是在默认信息下方展示额外卡片
             return Column(
               children: [
-                if (currentAccount.platform != Platform.osu)
-                  const SizedBox(height: 16),
+                const SizedBox(height: 16),
                 playerCard
               ],
             );

@@ -13,15 +13,6 @@ enum Platform {
   /// 开发者鱼
   developerFish,
 
-  /// MuseDash.moe
-  musedash,
-
-  /// Phigros
-  phigros,
-
-  /// osu!
-  osu,
-
   /// 其他自定义平台
   custom,
 }

@@ -48,17 +48,21 @@ class _NearcadePageState extends State<NearcadePage> {
 
     // 监听搜索框焦点变化
     _searchFocusNode.addListener(() {
-      setState(() {
-        _isSearchFocused = _searchFocusNode.hasFocus;
-      });
+      if (mounted) {
+        setState(() {
+          _isSearchFocused = _searchFocusNode.hasFocus;
+        });
+      }
     });
 
     // 监听 sheet 大小变化
     _sheetController.addListener(() {
       if (_sheetController.isAttached) {
-        setState(() {
-          _sheetSize = _sheetController.size;
-        });
+        if (mounted) {
+          setState(() {
+            _sheetSize = _sheetController.size;
+          });
+        }
       }
     });
   }
@@ -77,6 +81,7 @@ class _NearcadePageState extends State<NearcadePage> {
       // 检查位置服务是否启用
       bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
       if (!serviceEnabled) {
+        if (!mounted) return;
         setState(() => _isLoadingLocation = false);
         Get.snackbar(
           '提示',
@@ -92,6 +97,7 @@ class _NearcadePageState extends State<NearcadePage> {
       if (permission == LocationPermission.denied) {
         permission = await Geolocator.requestPermission();
         if (permission == LocationPermission.denied) {
+          if (!mounted) return;
           setState(() => _isLoadingLocation = false);
           Get.snackbar(
             '提示',
@@ -104,6 +110,7 @@ class _NearcadePageState extends State<NearcadePage> {
       }
 
       if (permission == LocationPermission.deniedForever) {
+        if (!mounted) return;
         setState(() => _isLoadingLocation = false);
         Get.snackbar(
           '提示',
@@ -122,6 +129,7 @@ class _NearcadePageState extends State<NearcadePage> {
         ),
       );
 
+      if (!mounted) return;
       setState(() {
         _currentPosition = LatLng(position.latitude, position.longitude);
         _isLoadingLocation = false;
@@ -133,6 +141,7 @@ class _NearcadePageState extends State<NearcadePage> {
       // 获取位置后加载附近店铺
       _loadShops();
     } catch (e) {
+      if (!mounted) return;
       setState(() => _isLoadingLocation = false);
       Get.snackbar(
         '错误',
@@ -144,10 +153,12 @@ class _NearcadePageState extends State<NearcadePage> {
   }
 
   Future<void> _loadShops() async {
-    setState(() {
-      _isLoadingShops = true;
-      _error = null;
-    });
+    if (mounted) {
+      setState(() {
+        _isLoadingShops = true;
+        _error = null;
+      });
+    }
 
     try {
       final response = await _apiService.discoverNearby(
@@ -164,6 +175,8 @@ class _NearcadePageState extends State<NearcadePage> {
             ),
           )
           .toSet();
+
+      if (!mounted) return;
       setState(() {
         _shops = response.shops;
         _filteredShops = _applyFilter(_shops, _currentFilter);
@@ -181,6 +194,7 @@ class _NearcadePageState extends State<NearcadePage> {
         _mapController!.moveCamera(amap.CameraUpdate.newLatLngZoom(target, 16));
       }
     } catch (e) {
+      if (!mounted) return;
       setState(() {
         _error = e.toString();
         _isLoadingShops = false;
@@ -244,10 +258,12 @@ class _NearcadePageState extends State<NearcadePage> {
   }
 
   void _onFilterSelected(String filter) {
-    setState(() {
-      _currentFilter = filter;
-      _filteredShops = _applyFilter(_shops, filter);
-    });
+    if (mounted) {
+      setState(() {
+        _currentFilter = filter;
+        _filteredShops = _applyFilter(_shops, filter);
+      });
+    }
 
     // 自动将相机移动到推荐的第一个机厅
     if (_filteredShops.isNotEmpty && _mapController != null) {
@@ -261,9 +277,11 @@ class _NearcadePageState extends State<NearcadePage> {
   }
 
   void _onMapCreated(amap.AMapController controller) {
-    setState(() {
-      _mapController = controller;
-    });
+    if (mounted) {
+      setState(() {
+        _mapController = controller;
+      });
+    }
 
     // 如果已经获取到位置，移动到当前位置
     if (!_isLoadingLocation) {

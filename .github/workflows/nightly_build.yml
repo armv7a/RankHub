@@ -11,8 +11,7 @@ on:
       - ".idea/**"
       - "test/**"
       - ".gitignore"
-  schedule:
-    - cron: "0 18 * * *"
+  workflow_dispatch:
 
 jobs:
   build_ios:
@@ -171,8 +170,8 @@ jobs:
         run: |
           cat <<EOF > android/key.properties
           storePassword=${{ secrets.ANDROID_RELEASE_KEY_PASSWORD }}
-          keyPassword=${{ secrets.ANDROID_RELEASE_KEY_PASSWORD }}
-          keyAlias=upload
+          keyPassword=${{ secrets.ANDROID_RELEASE_ALIAS_KEY_PASSWORD }}
+          keyAlias=${{ secrets.ANDROID_RELEASE_ALIAS }}
           storeFile=release.keystore
           EOF
 

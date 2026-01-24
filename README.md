@@ -2,6 +2,8 @@
   <img src="icon-1024.png" alt="RankHub Logo" width="120" height="120">
 </p>
 
+# ⚠️ 施工中：本 fork 仅保留 maimai 功能，暂不可使用，本项目当前使用 force push，请窒息
+
 # RankHub - 音游数据管理平台
 
 RankHub 是一个基于 Flutter 开发的跨平台音游数据管理应用，支持多平台账号管理、数据同步、成绩查询和其他功能。

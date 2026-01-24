@@ -4,7 +4,7 @@ import 'package:rank_hub/controllers/main_controller.dart';
 import 'package:rank_hub/pages/wiki.dart';
 import 'package:rank_hub/pages/rank.dart';
 import 'package:rank_hub/pages/toolbox.dart';
-import 'package:rank_hub/pages/community.dart';
+import 'package:rank_hub/pages/nearcade.dart';
 import 'package:rank_hub/pages/mine.dart';
 import 'dart:ui';
 
@@ -33,10 +33,10 @@ class MainPage extends GetView<MainController> {
             key: ValueKey<int>(controller.currentIndex.value),
             index: controller.currentIndex.value,
             children: const [
-              CommunityPage(),
               WikiPage(),
               RankPage(),
               ToolboxPage(),
+              NearcadePage(),
               MinePage(),
             ],
           ),
@@ -54,11 +54,6 @@ class MainPage extends GetView<MainController> {
               ).colorScheme.surface.withOpacity(0.8),
               destinations: const [
                 NavigationDestination(
-                  icon: Icon(Icons.people_outline),
-                  selectedIcon: Icon(Icons.people),
-                  label: '社区',
-                ),
-                NavigationDestination(
                   icon: Icon(Icons.book_outlined),
                   selectedIcon: Icon(Icons.book),
                   label: '资料库',
@@ -72,6 +67,11 @@ class MainPage extends GetView<MainController> {
                   icon: Icon(Icons.construction_outlined),
                   selectedIcon: Icon(Icons.construction),
                   label: '工具箱',
+                ),
+                NavigationDestination(
+                  icon: Icon(Icons.gamepad_outlined),
+                  selectedIcon: Icon(Icons.gamepad),
+                  label: '机厅',
                 ),
                 NavigationDestination(
                   icon: Icon(Icons.person_outline),

@@ -9,7 +9,7 @@ class DivingFishSongsTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(DivingFishMaimaiController());
+    final controller = Get.find<DivingFishMaimaiController>();
 
     return Obx(() {
       // 加载状态

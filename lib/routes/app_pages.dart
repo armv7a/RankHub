@@ -1,4 +1,6 @@
+import 'package:rank_hub/modules/divingfish/controllers/divingfish_maimai_controller.dart';
 import 'package:get/get.dart';
+import 'package:rank_hub/modules/lxns/maimai_lxns_controller.dart';
 import 'package:rank_hub/pages/main_page.dart';
 import 'package:rank_hub/pages/nearcade.dart';
 import 'package:rank_hub/pages/shop_detail_page.dart';
@@ -28,6 +30,8 @@ class AppPages {
         Get.lazyPut(() => AccountController(), fenix: true);
         Get.lazyPut(() => MainController());
         Get.lazyPut(() => GameController());
+        Get.lazyPut(() => DivingFishMaimaiController(), fenix: true);
+        Get.lazyPut(() => MaimaiLxnsController(), fenix: true);
       }),
     ),
     GetPage(name: AppRoutes.wiki, page: () => const WikiPage()),

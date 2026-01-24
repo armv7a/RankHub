@@ -9,7 +9,7 @@ class SongsTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(MaimaiLxnsController());
+    final controller = Get.find<MaimaiLxnsController>();
 
     return Obx(() {
       // 加载状态

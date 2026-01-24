@@ -1,9 +1,6 @@
 import 'package:get/get.dart';
 import 'package:rank_hub/models/account/account.dart';
 import 'package:rank_hub/modules/divingfish/services/divingfish_login_handler.dart';
-import 'package:rank_hub/modules/musedash/services/musedash_login_handler.dart';
-import 'package:rank_hub/modules/phigros/services/phigros_login_handler.dart';
-import 'package:rank_hub/modules/osu/services/osu_login_handler.dart';
 import 'package:rank_hub/services/platform_login_handler.dart';
 import 'package:rank_hub/modules/lxns/services/lxns_login_handler.dart';
 
@@ -25,10 +22,7 @@ class PlatformLoginManager extends GetxService {
   /// 初始化,注册所有平台的登录处理器
   void initialize() {
     registerHandler(LxnsLoginHandler());
-    registerHandler(MuseDashLoginHandler());
-    registerHandler(PhigrosLoginHandler());
     registerHandler(DivingFishLoginHandler());
-    registerHandler(OsuLoginHandler());
     // 未来可以继续添加其他平台
   }
 
