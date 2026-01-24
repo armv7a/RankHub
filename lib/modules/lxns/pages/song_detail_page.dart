@@ -548,7 +548,7 @@ class _SongDetailPageState extends State<SongDetailPage>
           });
 
           final audioUrl =
-              'https://assets2.lxns.net/maimai/music/${widget.song.songId}.mp3';
+              'https://preview.music.maimai.realtvop.top/${widget.song.songId}.mp3';
           await _audioPlayer.play(UrlSource(audioUrl));
         }
       }
