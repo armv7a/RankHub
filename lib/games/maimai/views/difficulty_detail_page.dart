@@ -40,7 +40,7 @@ class _DifficultyDetailPageState extends ConsumerState<DifficultyDetailPage>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this);
+    _tabController = TabController(length: 1, vsync: this);
   }
 
   @override
@@ -110,7 +110,6 @@ class _DifficultyDetailPageState extends ConsumerState<DifficultyDetailPage>
           controller: _tabController,
           tabs: const [
             Tab(text: '谱面信息'),
-            Tab(text: '谱面评论'),
           ],
         ),
       ),
@@ -441,33 +440,6 @@ class _DifficultyDetailPageState extends ConsumerState<DifficultyDetailPage>
                     ),
                   ),
                 ),
-          // 谱面评论页
-          Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.construction,
-                  size: 64,
-                  color: colorScheme.onSurfaceVariant,
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  '施工中',
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    color: colorScheme.onSurfaceVariant,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  '谱面评论功能开发中，敬请期待',
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: colorScheme.onSurfaceVariant,
-                  ),
-                ),
-              ],
-            ),
-          ),
         ],
       ),
     );
