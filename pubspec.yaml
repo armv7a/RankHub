@@ -84,7 +84,6 @@ flutter:
   assets:
     - icon-1024.png
     - assets/images/
-    - assets/osu/
     - shorebird.yaml
 
 flutter_launcher_icons:
