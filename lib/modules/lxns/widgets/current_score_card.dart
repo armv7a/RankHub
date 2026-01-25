@@ -7,11 +7,13 @@ import 'dx_score_progress.dart';
 class CurrentScoreCard extends StatelessWidget {
   final Score score;
   final int maxDxScore;
+  final Color? backgroundColor;
 
   const CurrentScoreCard({
     super.key,
     required this.score,
     required this.maxDxScore,
+    this.backgroundColor,
   });
 
   @override
@@ -19,6 +21,7 @@ class CurrentScoreCard extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Card(
+      color: backgroundColor,
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(

@@ -317,6 +317,7 @@ class _DifficultyDetailPageState extends State<DifficultyDetailPage>
                           CurrentScoreCard(
                             score: _currentScore!,
                             maxDxScore: widget.difficulty.notes!.total * 3,
+                            backgroundColor: _getCurrentScoreCardColor(),
                           ),
                         if (_currentScore != null) const SizedBox(height: 16),
                         // 历史成绩图表
@@ -570,5 +571,27 @@ class _DifficultyDetailPageState extends State<DifficultyDetailPage>
       default:
         return Colors.blue;
     }
+  }
+
+  Color _getCurrentScoreCardColor() {
+    final type = widget.difficulty.type;
+    if (type is SongType && type == SongType.utage) {
+      return const Color.fromARGB(255, 255, 111, 253);
+    }
+
+    switch (widget.difficulty.difficulty) {
+      case LevelIndex.basic:
+        return const Color.fromARGB(255, 107, 223, 95);
+      case LevelIndex.advanced:
+        return const Color.fromARGB(255, 254, 209, 74);
+      case LevelIndex.expert:
+        return const Color.fromARGB(255, 255, 129, 141);
+      case LevelIndex.master:
+        return const Color.fromARGB(255, 130, 100, 200);
+      case LevelIndex.reMaster:
+        return const Color.fromARGB(255, 218, 90, 255);
+    }
+
+    return const Color.fromARGB(255, 130, 100, 200);
   }
 }
