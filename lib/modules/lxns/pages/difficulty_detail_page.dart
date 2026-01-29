@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rank_hub/models/maimai/enums/level_index.dart';
+import 'package:rank_hub/models/maimai/enums/song_type.dart';
 import 'package:rank_hub/controllers/account_controller.dart';
 import 'package:rank_hub/services/credential_provider.dart';
 import 'package:rank_hub/modules/lxns/maimai_lxns.dart';

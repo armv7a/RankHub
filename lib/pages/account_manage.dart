@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:rank_hub/controllers/account_controller.dart';
 import 'package:rank_hub/models/account/account.dart';
 import 'package:rank_hub/services/platform_login_manager.dart';
@@ -82,136 +81,18 @@ class _AccountManagePageState extends State<AccountManagePage> {
 
   /// 显示绑定账号对话框
   void _showBindAccountDialog(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      builder: (context) => _PlatformSelectionSheet(controller: controller),
-    );
-  }
-}
-
-/// 平台选择底部弹出框
-class _PlatformSelectionSheet extends StatelessWidget {
-  final AccountController controller;
-
-  const _PlatformSelectionSheet({required this.controller});
-
-  @override
-  Widget build(BuildContext context) {
     final loginManager = PlatformLoginManager.instance;
     final handlers = loginManager.getAllHandlers();
-    final colorScheme = Theme.of(context).colorScheme;
 
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 16),
-      decoration: BoxDecoration(
-        color: colorScheme.surface,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          // 拖动指示器
-          Container(
-            width: 32,
-            height: 4,
-            margin: const EdgeInsets.only(bottom: 16),
-            decoration: BoxDecoration(
-              color: colorScheme.onSurfaceVariant.withValues(alpha: 0.4),
-              borderRadius: BorderRadius.circular(2),
-            ),
-          ),
-          // 标题
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Row(
-              children: [
-                Text(
-                  '选择平台',
-                  style: Theme.of(
-                    context,
-                  ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
-                ),
-                const Spacer(),
-                IconButton(
-                  onPressed: () => Navigator.pop(context),
-                  icon: const Icon(Icons.close),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 8),
-          // 平台列表
-          Flexible(
-            child: ListView.builder(
-              shrinkWrap: true,
-              itemCount: handlers.length,
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              itemBuilder: (context, index) {
-                final handler = handlers[index];
-                return Card(
-                  margin: const EdgeInsets.only(bottom: 12),
-                  child: ListTile(
-                    leading: Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        color: colorScheme.primaryContainer,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: handler.platformIconUrl != null
-                          ? ClipRRect(
-                              borderRadius: BorderRadius.circular(8),
-                              child: CachedNetworkImage(
-                                imageUrl: handler.platformIconUrl!,
-                                width: 40,
-                                height: 40,
-                                fit: BoxFit.cover,
-                                placeholder: (context, url) => Icon(
-                                  handler.platformIcon,
-                                  color: colorScheme.onPrimaryContainer,
-                                ),
-                                errorWidget: (context, url, error) => Icon(
-                                  handler.platformIcon,
-                                  color: colorScheme.onPrimaryContainer,
-                                ),
-                              ),
-                            )
-                          : Icon(
-                              handler.platformIcon,
-                              color: colorScheme.onPrimaryContainer,
-                            ),
-                    ),
-                    title: Text(handler.platformName),
-                    subtitle: Text(
-                      handler.platformDescription,
-                      style: const TextStyle(fontSize: 12),
-                    ),
-                    trailing: const Icon(Icons.chevron_right),
-                    onTap: () async {
-                      Navigator.pop(context);
-                      await _handlePlatformLogin(context, handler);
-                    },
-                  ),
-                );
-              },
-            ),
-          ),
-          // 底部安全区域
-          SizedBox(height: MediaQuery.of(context).padding.bottom),
-        ],
-      ),
-    );
+    _handlePlatformLogin(context, handlers.first);
   }
 
   Future<void> _handlePlatformLogin(BuildContext context, handler) async {
-    // 显示平台的登录页面
     final result = await handler.showLoginPage(context);
     if (result == null) {
       return; // 用户取消登录
     }
 
-    // 绑定账号
     final success = await controller.bindAccount(
       platform: handler.platform,
       externalId: result.externalId,
@@ -226,6 +107,7 @@ class _PlatformSelectionSheet extends StatelessWidget {
   }
 }
 
+/// 平台选择底部弹出框
 /// 账号卡片组件
 class _AccountCard extends StatelessWidget {
   final Account account;
