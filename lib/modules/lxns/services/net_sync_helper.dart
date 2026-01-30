@@ -68,12 +68,14 @@ class NetSyncHelper {
   /// 将 NET 成绩转换为标准 Score 对象
   ///
   /// 根据乐曲 ID 判断谱面类型：
-  /// - ID > 10000: DX 谱面，songId 需要对 10000 取模
+  /// - ID > 10000: DX 谱面，优先使用标准 ID（-10000），
+  ///              若标准 ID 不存在则保留 DX ID
   /// - ID <= 10000: 标准谱面
   static Future<List<Score>> _convertNetScoresToScores(
     List<NetScore> netScores,
   ) async {
     final scores = <Score>[];
+    final isarService = MaimaiIsarService.instance;
 
     for (final netScore in netScores) {
       // 只转换有成绩的记录
@@ -82,17 +84,21 @@ class NetSyncHelper {
         final isDxType = netScore.musicId > 10000;
         final songType = isDxType ? SongType.dx : SongType.standard;
 
-        // DX 谱面需要对 ID 取模
-        final actualSongId = isDxType
-            ? netScore.musicId - 10000
-            : netScore.musicId;
+        // DX 谱面优先尝试标准 ID；若标准 ID 不存在则保留 DX ID
+        int actualSongId = netScore.musicId;
+        if (isDxType) {
+          final standardId = netScore.musicId - 10000;
+          final standardSong = await isarService.getSongById(standardId);
+          actualSongId = standardSong == null ? netScore.musicId : standardId;
+        }
 
         // 先转换为基础 Score
         final baseScore = netScore.toScore(type: songType);
 
-        // 如果是 DX 谱面，需要修正 songId
-        final score = isDxType
-            ? Score(
+        // 如果需要修正 songId，则构造新对象
+        final score = actualSongId == baseScore.songId
+            ? baseScore
+            : Score(
                 songId: actualSongId,
                 songName: baseScore.songName,
                 level: baseScore.level,
@@ -108,8 +114,7 @@ class NetSyncHelper {
                 playTime: baseScore.playTime,
                 uploadTime: baseScore.uploadTime,
                 lastPlayedTime: baseScore.lastPlayedTime,
-              )
-            : baseScore;
+              );
 
         scores.add(score);
       }
