@@ -823,6 +823,11 @@ class _OAuth2WebViewPageState extends State<_OAuth2WebViewPage> {
       body: InAppWebView(
         initialUrlRequest: URLRequest(url: WebUri(widget.authUrl)),
         initialSettings: InAppWebViewSettings(
+          javaScriptEnabled: true,
+          domStorageEnabled: true,
+          thirdPartyCookiesEnabled: true,
+          useShouldOverrideUrlLoading: true,
+          useHybridComposition: true,
           mediaPlaybackRequiresUserGesture: true,
           javaScriptCanOpenWindowsAutomatically: false,
         ),
