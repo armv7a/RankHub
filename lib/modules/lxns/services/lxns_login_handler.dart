@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:dio/dio.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter_web_auth_2/flutter_web_auth_2.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:get/get.dart' hide Response;
@@ -84,11 +83,12 @@ class LxnsLoginHandler extends PlatformLoginHandler {
       print('📤 授权 URL: $authUrl');
       print('📤 Redirect URI: $redirectUri');
 
-      // 使用 flutter_web_auth 打开授权页面
-      final result = await FlutterWebAuth2.authenticate(
-        url: authUrl,
-        callbackUrlScheme: 'rankhub',
-      );
+      // 使用应用内 WebView 打开授权页面
+      final result = await _showOAuth2WebView(authUrl);
+      if (result == null || result.isEmpty) {
+        print('❌ 未收到回调 URL');
+        return null;
+      }
 
       print('📥 收到回调: $result');
 
@@ -214,6 +214,24 @@ class LxnsLoginHandler extends PlatformLoginHandler {
       context,
       MaterialPageRoute(
         builder: (context) => _ManualAuthPage(authUrl: authUrl),
+        fullscreenDialog: true,
+      ),
+    );
+  }
+
+  /// 显示 OAuth2 授权页面（应用内 WebView）
+  Future<String?> _showOAuth2WebView(String authUrl) async {
+    final BuildContext? context = Get.context;
+    if (context == null) return null;
+
+    return await Navigator.push<String>(
+      context,
+      MaterialPageRoute(
+        builder:
+            (context) => _OAuth2WebViewPage(
+              authUrl: authUrl,
+              redirectUri: redirectUri,
+            ),
         fullscreenDialog: true,
       ),
     );
@@ -668,11 +686,11 @@ class _LxnsOAuth2LoginPageState extends State<_LxnsOAuth2LoginPage> {
                           ),
                           const SizedBox(height: 8),
                           Text(
-                            '方式1：自动跳转（推荐）\n'
-                            '• 打开浏览器进行授权\n'
+                            '方式1：应用内授权（推荐）\n'
+                            '• 在应用内完成授权\n'
                             '• 授权成功后自动返回应用\n\n'
                             '方式2：手动输入授权码\n'
-                            '• 适用于自动跳转失败的情况\n'
+                            '• 适用于应用内授权失败的情况\n'
                             '• 需要手动复制授权码',
                             style: Theme.of(context).textTheme.bodySmall
                                 ?.copyWith(color: colorScheme.onSurfaceVariant),
@@ -714,7 +732,7 @@ class _LxnsOAuth2LoginPageState extends State<_LxnsOAuth2LoginPage> {
                             child: CircularProgressIndicator(strokeWidth: 2),
                           )
                         : const Icon(Icons.login),
-                    label: Text(_isLoading ? '登录中...' : '自动跳转登录'),
+                    label: Text(_isLoading ? '登录中...' : '应用内授权登录'),
                     style: FilledButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       minimumSize: const Size(double.infinity, 0),
@@ -749,6 +767,95 @@ class _ManualAuthPage extends StatefulWidget {
 
   @override
   State<_ManualAuthPage> createState() => _ManualAuthPageState();
+}
+
+/// OAuth2 授权页面（应用内 WebView）
+class _OAuth2WebViewPage extends StatefulWidget {
+  final String authUrl;
+  final String redirectUri;
+
+  const _OAuth2WebViewPage({
+    required this.authUrl,
+    required this.redirectUri,
+  });
+
+  @override
+  State<_OAuth2WebViewPage> createState() => _OAuth2WebViewPageState();
+}
+
+class _OAuth2WebViewPageState extends State<_OAuth2WebViewPage> {
+  bool _isLoading = true;
+
+  bool _isRedirectMatch(Uri uri) {
+    if (uri.scheme == 'rankhub') {
+      return true;
+    }
+    final redirect = Uri.parse(widget.redirectUri);
+    return uri.scheme == redirect.scheme &&
+        uri.host == redirect.host &&
+        uri.path == redirect.path;
+  }
+
+  void _handleRedirect(Uri uri) {
+    Navigator.pop(context, uri.toString());
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('落雪咖啡屋授权'),
+        actions: [
+          IconButton(
+            onPressed: () => Navigator.pop(context),
+            icon: const Icon(Icons.close),
+            tooltip: '关闭',
+          ),
+        ],
+        bottom:
+            _isLoading
+                ? const PreferredSize(
+                  preferredSize: Size.fromHeight(2),
+                  child: LinearProgressIndicator(minHeight: 2),
+                )
+                : null,
+      ),
+      body: InAppWebView(
+        initialUrlRequest: URLRequest(url: WebUri(widget.authUrl)),
+        initialSettings: InAppWebViewSettings(
+          mediaPlaybackRequiresUserGesture: true,
+          javaScriptCanOpenWindowsAutomatically: false,
+        ),
+        onWebViewCreated: (controller) {},
+        onLoadStart: (controller, url) {
+          if (url != null && _isRedirectMatch(url)) {
+            _handleRedirect(url);
+          }
+        },
+        shouldOverrideUrlLoading: (controller, navigationAction) async {
+          final uri = navigationAction.request.url;
+          if (uri != null && _isRedirectMatch(uri)) {
+            _handleRedirect(uri);
+            return NavigationActionPolicy.CANCEL;
+          }
+          return NavigationActionPolicy.ALLOW;
+        },
+        onLoadStop: (controller, url) async {
+          if (mounted) {
+            setState(() => _isLoading = false);
+          }
+        },
+        onLoadError: (controller, url, code, message) {
+          if (mounted) {
+            setState(() => _isLoading = false);
+          }
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text('页面加载失败：$message')));
+        },
+      ),
+    );
+  }
 }
 
 class _ManualAuthPageState extends State<_ManualAuthPage> {
